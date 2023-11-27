@@ -19,19 +19,8 @@ class DietProblem(FloatProblem):
         
         # Cargar la configuración
         self.config = Config('config.ini')
-
+    
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        # Cargar los parámetros de la configuración
-        alpha = self.config.alpha
-        beta = self.config.beta
-        gamma = self.config.gamma
-        sigma = self.config.sigma
-
-        kc = self.config.kc
-        p = self.config.p
-        hc = self.config.hc
-        g = self.config.g
-
         total_fitness = 0
 
         for i in range(solution.number_of_variables):
@@ -39,7 +28,10 @@ class DietProblem(FloatProblem):
             h = ...  # define h
 
             # Calcula la función de fitness para cada comida
-            fitness = alpha * abs(kc - c.kcal) + beta * (abs(p - c.p) + abs(hc - c.hc) + abs(g - c.g)) + gamma * self.pond_horario(c, h) + sigma * self.cant_rep(c, solution)
+            fitness = self.config.alpha * abs(self.config.kc - c.kcal) + \
+                    self.config.beta * (abs(self.config.p - c.p) + abs(self.config.hc - c.hc) + abs(self.config.g - c.g)) + \
+                    self.config.gamma * self.pond_horario(c, h) + \
+                    self.config.sigma * self.cant_rep(c, solution)
 
             total_fitness += fitness ** 2
 
