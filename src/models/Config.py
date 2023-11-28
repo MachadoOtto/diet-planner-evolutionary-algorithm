@@ -1,6 +1,7 @@
 import configparser
 
 class Config:
+    
     def __init__(self, filename):
         config = configparser.ConfigParser()
         config.read(filename)
