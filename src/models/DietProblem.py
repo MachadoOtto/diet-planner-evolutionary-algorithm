@@ -1,4 +1,5 @@
 import numpy as np
+import re
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 from src.models.Config import Config
@@ -58,10 +59,14 @@ class DietProblem(FloatProblem):
 
     def pond_horario(self, c, h):
         meal = self.food_objects[c - 1]
+        ponds = meal['ponderacion_horaria']
+
         if meal is None:
             raise ValueError(f"No se encontró la comida con id {c}")
-        pond = meal['hour_weight']
-        ajuste = pond.get(h, 0)
+        ponds = ponds.split(',')        
+        match = re.search(r':(.*)', ponds[h])
+        pond = re.sub('}','',match.group(1).strip())
+        ajuste = float(pond)
         return ajuste
 
     def cant_rep(self, c, solution):
