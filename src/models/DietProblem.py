@@ -1,7 +1,5 @@
 import numpy as np
 import re
-#from jmetal.core.problem import FloatProblem
-#from jmetal.core.solution import FloatSolution
 from jmetal.core.problem import IntegerProblem
 from jmetal.core.solution import IntegerSolution
 from src.models.Config import Config
