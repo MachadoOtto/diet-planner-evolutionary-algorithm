@@ -14,3 +14,4 @@ class Config:
         self.p = float(config['DEFAULT']['p'])
         self.hc = float(config['DEFAULT']['hc'])
         self.g = float(config['DEFAULT']['g'])
+        self.probabilityColumn = float(config['DEFAULT']['probabilityColumn'])
