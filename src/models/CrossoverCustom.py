@@ -1,14 +1,11 @@
 import copy
 import random
 from typing import List
-
 from jmetal.core.operator import Crossover
-from jmetal.core.solution import (
-    PermutationSolution,
-)
+from jmetal.core.solution import PermutationSolution
 
 class ColumnCrossover(Crossover[PermutationSolution, PermutationSolution]):
-    def __init__(self, probability: float, probabilityColumn: float, number_of_columns:int, number_of_rows:int):
+    def __init__(self, probability: float, probabilityColumn: float, number_of_columns: int, number_of_rows: int):
         super(ColumnCrossover, self).__init__(probability=probability)
         self.probabilityColumn = probabilityColumn
         self.number_of_columns = number_of_columns
@@ -22,11 +19,11 @@ class ColumnCrossover(Crossover[PermutationSolution, PermutationSolution]):
         rand = random.random()
         
         if rand <= self.probability:
-            for i in range (0,self.number_of_columns):
+            for i in range (0, self.number_of_columns):
                 if random.random() <= self.probabilityColumn:
-                    for j in range(0,self.number_of_rows):
-                        offspring[0].variables[i*self.number_of_rows+j] = parents[0].variables[i*self.number_of_rows+j]
-                        offspring[1].variables[i*self.number_of_rows+j] = parents[1].variables[i*self.number_of_rows+j]
+                    for j in range(0, self.number_of_rows):
+                        offspring[0].variables[i * self.number_of_rows + j] = parents[0].variables[i * self.number_of_rows + j]
+                        offspring[1].variables[i * self.number_of_rows + j] = parents[1].variables[i * self.number_of_rows + j]
 
         return offspring
 
@@ -41,7 +38,7 @@ class ColumnCrossover(Crossover[PermutationSolution, PermutationSolution]):
 
 
 class RowCrossover(Crossover[PermutationSolution, PermutationSolution]):
-    def __init__(self, probability: float, probabilityColumn: float, number_of_columns:int, number_of_rows:int):
+    def __init__(self, probability: float, probabilityColumn: float, number_of_columns: int, number_of_rows: int):
         super(RowCrossover, self).__init__(probability=probability)
         self.probabilityColumn = probabilityColumn
         self.number_of_columns = number_of_columns
@@ -55,11 +52,11 @@ class RowCrossover(Crossover[PermutationSolution, PermutationSolution]):
         rand = random.random()
         
         if rand <= self.probability:
-            for i in range (0,self.number_of_rows):
+            for i in range (0, self.number_of_rows):
                 if random.random() <= self.probabilityColumn:
-                    for j in range(0,self.number_of_columns):
-                        offspring[0].variables[i+j*self.number_of_columns] = parents[0].variables[i+j*self.number_of_columns]
-                        offspring[1].variables[i+j*self.number_of_columns] = parents[1].variables[i+j*self.number_of_columns]
+                    for j in range(0, self.number_of_columns):
+                        offspring[0].variables[i + j * self.number_of_columns] = parents[0].variables[i + j * self.number_of_columns]
+                        offspring[1].variables[i + j * self.number_of_columns] = parents[1].variables[i + j * self.number_of_columns]
 
         return offspring
 

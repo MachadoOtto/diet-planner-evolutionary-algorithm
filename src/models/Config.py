@@ -10,6 +10,7 @@ class Config:
         self.beta = float(config['DEFAULT']['beta'])
         self.gamma = float(config['DEFAULT']['gamma'])
         self.sigma = float(config['DEFAULT']['sigma'])
+        self.delta = float(config['DEFAULT']['delta'])
         self.kc = float(config['DEFAULT']['kc'])
         self.p = float(config['DEFAULT']['p'])
         self.hc = float(config['DEFAULT']['hc'])
