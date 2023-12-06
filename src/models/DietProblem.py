@@ -25,6 +25,8 @@ class DietProblem(IntegerProblem):
 
         # Load configuration
         self.config = config
+
+        self.all_fitness = []
         
     def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
         total_fitness = 0
@@ -73,11 +75,14 @@ class DietProblem(IntegerProblem):
         # Calculates the variety score for the whole solution
         variety_score_total = np.sum(food_counts_total > 1)
         total_variety += self.config.delta * variety_score_total
-                
+        
+        self.all_fitness.append(total_fitness ** 0.5)
+
         solution.objectives[0] = total_fitness ** 0.5
         solution.objectives[1] = total_variety
-        print('total_fitness: ' + str(solution.objectives[0]))
-        print('total_variety: ' + str(solution.objectives[1]))
+        #print(solution.variables)
+        #print('total_fitness: ' + str(solution.objectives[0]))
+        #print('total_variety: ' + str(solution.objectives[1]))
         
         return solution
 
