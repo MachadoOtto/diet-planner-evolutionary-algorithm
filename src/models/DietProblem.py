@@ -57,10 +57,10 @@ class DietProblem(IntegerProblem):
                     raise ValueError(f"No meal found with id {c}")
                 
                 # Accumulate the values of each meal in one day
-                kcal_acc += meal['kcal']    
-                p_acc += meal['p']
-                hc_acc += meal['hc']
-                g_acc += meal['g'] 
+                kcal_acc += float(meal['Calories'])    
+                p_acc +=    float(meal['Protein'])
+                hc_acc +=   float(meal['Carbs'])
+                g_acc +=    float(meal['Fat'])
                 
             # Calculate fitness_day and update total_fitness
             fitness_day = self.fitness_column(kcal_acc, p_acc, hc_acc, g_acc, c, food)
@@ -96,8 +96,7 @@ class DietProblem(IntegerProblem):
 
     def pond_horario(self, c: int, h: int) -> float:
         meal = self.food_objects[c - 1]
-        ponds = meal['ponderacion_horaria']
-
+        ponds = meal['hourly_weighting']
         if meal is None:
             raise ValueError(f"No se encontró la comida con id {c}")
         
