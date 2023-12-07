@@ -53,8 +53,8 @@ class DietProblem(IntegerProblem):
                 food_counts_total[c - 1] += 1
                 
                 # Search for meal in the food array
-                meal = self.food_objects[c - 1]
-            
+                meal = self.food_objects[c]
+               
                 if meal is None:
                     raise ValueError(f"No meal found with id {c}")
                 

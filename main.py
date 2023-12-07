@@ -2,7 +2,7 @@ from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 
 from jmetal.operator import BestSolutionSelection, RandomSolutionSelection
 from jmetal.operator import IntegerPolynomialMutation
-from jmetal.operator import CXCrossover,DifferentialEvolutionCrossover,NullCrossover,PMXCrossover,SBXCrossover,SPXCrossover
+#from jmetal.operator import CXCrossover,DifferentialEvolutionCrossover,NullCrossover,PMXCrossover,SBXCrossover,SPXCrossover
 
 
 from jmetal.util.termination_criterion import StoppingByEvaluations
@@ -29,11 +29,11 @@ def main():
     algorithm = GeneticAlgorithm(
         problem=problem,
         population_size=100,
-        offspring_population_size=2,
-        mutation=IntegerPolynomialMutation(probability=0.2),
+        offspring_population_size=1,
+        mutation=IntegerPolynomialMutation(probability=0.1),
         crossover=ColumnCrossover(probability=0.2, probabilityColumn=config.probabilityColumn, number_of_columns=problem.number_of_meals, number_of_rows=problem.number_of_days),
         selection=RandomSolutionSelection(),
-        termination_criterion=StoppingByEvaluations(max_evaluations=10000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=100000)
     )
 
     algorithm.run()
@@ -61,10 +61,12 @@ def plot_fitness(fitness):
 
 def get_solution_analysis(solution, problem):
     food_array = generate_food_array('data/format_nutrients.csv')
+    config = Config('config\config.ini')
     calories_week = 0
     protein_week = 0
     carbs_week = 0
     fat_week = 0 
+    the_solution = solution.variables
     for day in range(7):
         print(f"Day {day + 1}:")
         calories_day = 0
@@ -72,24 +74,27 @@ def get_solution_analysis(solution, problem):
         carbs_day = 0
         fat_day = 0 
         for meal in range(4): 
-            print(f"    {meal + 1}: {food_array[solution[day * 4 + meal]]['food']}")
-            calories_day += int(food_array[solution[day * 4 + meal]]['Calories'])
-            protein_day += float(food_array[solution[day * 4 + meal]]['Protein'])
-            carbs_day += float(food_array[solution[day * 4 + meal]]['Carbs'])
-            fat_day += float(food_array[solution[day * 4 + meal]]['Fat'])
+            print(f"    {meal + 1}: {food_array[the_solution[day * 4 + meal]]['food']}")
+            calories_day += int(food_array[the_solution[day * 4 + meal]]['Calories'])
+            protein_day += float(food_array[the_solution[day * 4 + meal]]['Protein'])
+            carbs_day += float(food_array[the_solution[day * 4 + meal]]['Carbs'])
+            fat_day += float(food_array[the_solution[day * 4 + meal]]['Fat'])
         print(f"    Calories: {calories_day} - Protein: {protein_day} - Carbs: {carbs_day} - Fat: {fat_day}" )     
         calories_week += calories_day
         protein_week += protein_day
         carbs_week += carbs_day
         fat_week += fat_day
+    print(f"Objetives calories: {config.kc} - Objetives protein: {config.p} - Objetives carbs: {config.hc} - Objetives fat: {config.g}" )
     print(f"Total Calories: {calories_week/problem.number_of_days} - Total Protein: {protein_week/problem.number_of_days} - Total Carbs: {carbs_week/problem.number_of_days} - Total Fat: {fat_week/problem.number_of_days}" )
     plot_fitness(problem.all_fitness)
+    problem.evaluate(solution)
+    print(f"Fitness solution: {solution.objectives[0]}")
 
 
 
 if __name__ == '__main__':
     solution, problem = main()
-    get_solution_analysis(solution.variables, problem)
+    get_solution_analysis(solution, problem)
 
 
     
