@@ -14,6 +14,7 @@ from src.models.CrossoverCustom import ColumnCrossover, RowCrossover
 def main():
     food_array = generate_food_array('data/format_nutrients.csv')
     food_ids = [food['id'] for food in food_array]
+    #food_ids = [int(i) for i in food_ids]
     
     config = Config('config\config.ini')
 
@@ -32,7 +33,7 @@ def main():
         mutation=IntegerPolynomialMutation(probability=0.2),
         crossover=ColumnCrossover(probability=0.2, probabilityColumn=config.probabilityColumn, number_of_columns=problem.number_of_meals, number_of_rows=problem.number_of_days),
         selection=RandomSolutionSelection(),
-        termination_criterion=StoppingByEvaluations(max_evaluations=100000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=10000)
     )
 
     algorithm.run()
@@ -60,22 +61,28 @@ def plot_fitness(fitness):
 
 def get_solution_analysis(solution, problem):
     food_array = generate_food_array('data/format_nutrients.csv')
+    calories_week = 0
+    protein_week = 0
+    carbs_week = 0
+    fat_week = 0 
     for day in range(7):
         print(f"Day {day + 1}:")
-        calories = 0
-        protein = 0
-        carbs = 0
-        fat = 0 
-        day = 'f"'
-        for meal in range(4):
-            day = day + food_array[solution[day * 4 + meal]]['food'] + ', ' " 
-            #print(f"    {meal + 1}: {food_array[solution[day * 4 + meal]]['food']}")
-            calories += int(food_array[solution[day * 4 + meal]]['Calories'])
-            protein += float(food_array[solution[day * 4 + meal]]['Protein'])
-            carbs += float(food_array[solution[day * 4 + meal]]['Carbs'])
-            fat += float(food_array[solution[day * 4 + meal]]['Fat'])
-        print(day)
-        print(f"    Calories: {calories} - Protein: {protein} - Carbs: {carbs} - Fat: {fat}" )     
+        calories_day = 0
+        protein_day = 0
+        carbs_day = 0
+        fat_day = 0 
+        for meal in range(4): 
+            print(f"    {meal + 1}: {food_array[solution[day * 4 + meal]]['food']}")
+            calories_day += int(food_array[solution[day * 4 + meal]]['Calories'])
+            protein_day += float(food_array[solution[day * 4 + meal]]['Protein'])
+            carbs_day += float(food_array[solution[day * 4 + meal]]['Carbs'])
+            fat_day += float(food_array[solution[day * 4 + meal]]['Fat'])
+        print(f"    Calories: {calories_day} - Protein: {protein_day} - Carbs: {carbs_day} - Fat: {fat_day}" )     
+        calories_week += calories_day
+        protein_week += protein_day
+        carbs_week += carbs_day
+        fat_week += fat_day
+    print(f"Total Calories: {calories_week/problem.number_of_days} - Total Protein: {protein_week/problem.number_of_days} - Total Carbs: {carbs_week/problem.number_of_days} - Total Fat: {fat_week/problem.number_of_days}" )
     plot_fitness(problem.all_fitness)
 
 

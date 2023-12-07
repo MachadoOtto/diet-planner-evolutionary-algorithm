@@ -16,12 +16,12 @@ class DietProblem(IntegerProblem):
         self.food_objects = food_objects
 
         # Set objectives
-        self.obj_directions = [self.MINIMIZE, self.MAXIMIZE]
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ['Fitness', 'Variety']
 
         # Set bounds for variables
         self.lower_bound = [1 for _ in range(number_of_meals * number_of_days)]
-        self.upper_bound = [len(food_ids) for _ in range(number_of_meals * number_of_days)]
+        self.upper_bound = [len(food_ids)-1 for _ in range(number_of_meals * number_of_days)]
 
         # Load configuration
         self.config = config
@@ -80,7 +80,6 @@ class DietProblem(IntegerProblem):
 
         solution.objectives[0] = total_fitness ** 0.5
         solution.objectives[1] = total_variety
-        #print(solution.variables)
         #print('total_fitness: ' + str(solution.objectives[0]))
         #print('total_variety: ' + str(solution.objectives[1]))
         
