@@ -5,7 +5,6 @@ from jmetal.core.solution import IntegerSolution
 from src.models.Config import Config
 
 class DietProblem(IntegerProblem):
-
     def __init__(self, number_of_meals: int, number_of_days: int, max_portions:int, food_ids: int, 
             food_objects: list, config: Config):
         super(DietProblem, self).__init__()
@@ -25,7 +24,7 @@ class DietProblem(IntegerProblem):
         # Set bounds for variables
         self.lower_bound = [0 for _ in range(number_of_meals * number_of_days*max_portions)]
         self.upper_bound = [self.max_food for _ in range(number_of_meals * number_of_days*max_portions)]
-       
+
         # Load configuration
         self.config = config
 
@@ -60,7 +59,7 @@ class DietProblem(IntegerProblem):
                             fitness_day += fitness_penalty_no_portions
 
                     else:
-                        # Add one to the each food counter
+                        # Add one to the each food counter 
                         food_counts_day[c] += 1
                         food_counts_total[c] += 1
 
@@ -79,6 +78,7 @@ class DietProblem(IntegerProblem):
 
                     if (portion == self.max_portions - 1):
                         null_portions = 0   
+                        
             # Calculate fitness_day and update total_fitness
             fitness_day = self.fitness_column(kcal_acc, p_acc, hc_acc, g_acc, pond_meal**0.5)
             total_fitness += fitness_day ** 2

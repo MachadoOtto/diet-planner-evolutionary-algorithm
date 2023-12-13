@@ -35,9 +35,9 @@ def main():
         crossover=RowCrossover(probability=0.2, probabilityColumn=config.probabilityColumn,
             number_of_columns=problem.number_of_meals, number_of_rows=problem.number_of_days,
             number_of_instances=problem.max_portions),
-        selection=RandomSolutionSelection(),
-        termination_criterion=StoppingByEvaluations(max_evaluations=10000)
-    )
+            selection=RandomSolutionSelection(),
+            termination_criterion=StoppingByEvaluations(max_evaluations=10000)
+        )
 
     algorithm.run()
     result = algorithm.get_result()
@@ -97,8 +97,6 @@ def get_solution_analysis(solution, problem):
     problem.evaluate(solution)
     print(f"Fitness solution: {solution.objectives[0]}")
     print(f"Variety solution: {solution.objectives[1]}")
-
-
 
 if __name__ == '__main__':
     solution, problem = main()
