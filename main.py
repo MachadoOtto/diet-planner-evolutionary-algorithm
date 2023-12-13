@@ -20,6 +20,7 @@ def main():
     problem = DietProblem(
         number_of_meals=4,
         number_of_days=7,
+        max_portions=3,
         food_ids=food_ids,
         food_objects=food_array,
         config=config
@@ -30,7 +31,7 @@ def main():
         population_size=100,
         offspring_population_size=2,
         mutation=IntegerPolynomialMutation(probability=0.1),
-        crossover=RowCrossover(probability=0.3, probabilityColumn=config.probabilityColumn, number_of_columns=problem.number_of_meals, number_of_rows=problem.number_of_days),
+        crossover=RowCrossover(probability=0.3, probabilityColumn=config.probabilityColumn, number_of_columns=problem.number_of_meals, number_of_rows=problem.number_of_days, number_of_instances=problem.max_portions),
         selection=RandomSolutionSelection(),
         termination_criterion=StoppingByEvaluations(max_evaluations=10000)
     )
@@ -55,11 +56,14 @@ def get_solution_analysis(solution):
         carbs = 0
         fat = 0 
         for meal in range(4):
-            print(f"    {meal + 1}: {food_array[solution[day * 4 + meal]]['food']}")
-            calories += int(food_array[solution[day * 4 + meal]]['Calories'])
-            protein += float(food_array[solution[day * 4 + meal]]['Protein'])
-            carbs += float(food_array[solution[day * 4 + meal]]['Carbs'])
-            fat += float(food_array[solution[day * 4 + meal]]['Fat'])
+            print(f"  Meal {meal + 1}:")
+            for portion in range(3):
+                if (solution[day * 4 * 3 + meal * 3 + portion] != 0):
+                    print(f"    {portion + 1}: {food_array[solution[day * 4 * 3 + meal * 3 + portion] - 1]['food']}")
+                    calories += int(food_array[solution[day * 4 * 3 + meal * 3 + portion] - 1]['Calories'])
+                    protein += float(food_array[solution[day * 4 * 3 + meal * 3 + portion] - 1]['Protein'])
+                    carbs += float(food_array[solution[day * 4 * 3 + meal * 3 + portion] - 1]['Carbs'])
+                    fat += float(food_array[solution[day * 4 * 3 + meal * 3 + portion] - 1]['Fat'])
         print(f"    Calories: {calories} - Protein: {protein} - Carbs: {carbs} - Fat: {fat}" )     
 
 if __name__ == '__main__':
