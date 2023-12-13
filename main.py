@@ -21,6 +21,7 @@ def main():
     problem = DietProblem(
         number_of_meals=4,
         number_of_days=7,
+        max_portions=4,
         food_ids=food_ids,
         food_objects=food_array,
         config=config
@@ -31,9 +32,11 @@ def main():
         population_size=100,
         offspring_population_size=1,
         mutation=IntegerPolynomialMutation(probability=0.1),
-        crossover=ColumnCrossover(probability=0.2, probabilityColumn=config.probabilityColumn, number_of_columns=problem.number_of_meals, number_of_rows=problem.number_of_days),
+        crossover=RowCrossover(probability=0.2, probabilityColumn=config.probabilityColumn,
+            number_of_columns=problem.number_of_meals, number_of_rows=problem.number_of_days,
+            number_of_instances=problem.max_portions),
         selection=RandomSolutionSelection(),
-        termination_criterion=StoppingByEvaluations(max_evaluations=100000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=10000)
     )
 
     algorithm.run()
@@ -67,28 +70,33 @@ def get_solution_analysis(solution, problem):
     carbs_week = 0
     fat_week = 0 
     the_solution = solution.variables
-    for day in range(7):
+    for day in range(problem.number_of_days):
         print(f"Day {day + 1}:")
         calories_day = 0
         protein_day = 0
         carbs_day = 0
         fat_day = 0 
-        for meal in range(4): 
-            print(f"    {meal + 1}: {food_array[the_solution[day * 4 + meal]]['food']}")
-            calories_day += int(food_array[the_solution[day * 4 + meal]]['Calories'])
-            protein_day += float(food_array[the_solution[day * 4 + meal]]['Protein'])
-            carbs_day += float(food_array[the_solution[day * 4 + meal]]['Carbs'])
-            fat_day += float(food_array[the_solution[day * 4 + meal]]['Fat'])
-        print(f"    Calories: {calories_day} - Protein: {protein_day} - Carbs: {carbs_day} - Fat: {fat_day}" )     
+        for meal in range(problem.number_of_meals): 
+            print(f"  Meal {meal + 1}:")
+            for portion in range(problem.max_portions):
+                index = day * problem.number_of_meals * problem.max_portions + meal * problem.max_portions + portion
+                if (the_solution[index] != problem.max_food):
+                    print(f"    {portion + 1}: {food_array[the_solution[index]]['food']}")
+                    calories_day += int(food_array[the_solution[index]]['Calories'])
+                    protein_day += float(food_array[the_solution[index]]['Protein'])
+                    carbs_day += float(food_array[the_solution[index]]['Carbs'])
+                    fat_day += float(food_array[the_solution[index]]['Fat'])
+        print(f"    Calories: {calories_day} - Protein: {protein_day} - Carbs: {protein_day} - Fat: {fat_day}" )     
         calories_week += calories_day
         protein_week += protein_day
         carbs_week += carbs_day
         fat_week += fat_day
     print(f"Objetives calories: {config.kc} - Objetives protein: {config.p} - Objetives carbs: {config.hc} - Objetives fat: {config.g}" )
     print(f"Total Calories: {calories_week/problem.number_of_days} - Total Protein: {protein_week/problem.number_of_days} - Total Carbs: {carbs_week/problem.number_of_days} - Total Fat: {fat_week/problem.number_of_days}" )
-    plot_fitness(problem.all_fitness)
+    #plot_fitness(problem.all_fitness)
     problem.evaluate(solution)
     print(f"Fitness solution: {solution.objectives[0]}")
+    print(f"Variety solution: {solution.objectives[1]}")
 
 
 
