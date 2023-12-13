@@ -5,11 +5,13 @@ from jmetal.core.operator import Crossover
 from jmetal.core.solution import PermutationSolution
 
 class ColumnCrossover(Crossover[PermutationSolution, PermutationSolution]):
-    def __init__(self, probability: float, probabilityColumn: float, number_of_columns: int, number_of_rows: int, number_of_instances: int):
+    def __init__(self, probability: float, probabilityColumn: float, number_of_columns: int,
+            number_of_rows: int, number_of_instances: int):
         super(ColumnCrossover, self).__init__(probability=probability)
         self.probabilityColumn = probabilityColumn
         self.number_of_columns = number_of_columns
         self.number_of_rows = number_of_rows
+        self.number_of_instances = number_of_instances
         
     def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
         if len(parents) != 2:
@@ -38,7 +40,8 @@ class ColumnCrossover(Crossover[PermutationSolution, PermutationSolution]):
 
 
 class RowCrossover(Crossover[PermutationSolution, PermutationSolution]):
-    def __init__(self, probability: float, probabilityColumn: float, number_of_columns: int, number_of_rows: int, number_of_instances: int):
+    def __init__(self, probability: float, probabilityColumn: float, number_of_columns: int, 
+            number_of_rows: int, number_of_instances: int):
         super(RowCrossover, self).__init__(probability=probability)
         self.probabilityColumn = probabilityColumn
         self.number_of_columns = number_of_columns

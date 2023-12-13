@@ -64,6 +64,12 @@ values = [
 foods['hourly_weighting'] = np.select(conditions, values, default='OOOOOOOOOO')
 foods = foods.drop(['Category'], axis=1) 
 
+
+#for i in range(len(foods)):
+#    print (str(foods['Calories'][i]) + ' - ' + str(foods['Protein'][i]) + ' - ' +
+#            str(foods['Carbs'][i]) + ' - ' + str(foods['Fat'][i]))
+
+
 # Agrego duplicados para darle variedad a la solución
 new_rows = []
 for index, row in foods.iterrows():
