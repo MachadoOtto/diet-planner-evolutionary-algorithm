@@ -18,7 +18,7 @@ class DietProblem(IntegerProblem):
         self.max_food = len(food_ids)
 
         # Set objectives
-        self.obj_directions = [self.MINIMIZE, self.MAXIMIZE]
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ['Fitness', 'Variety']
 
         # Set bounds for variables
@@ -29,6 +29,7 @@ class DietProblem(IntegerProblem):
         self.config = config
 
         self.all_fitness = []
+        self.all_variety = []
         
     def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
         total_fitness = 0
@@ -91,10 +92,12 @@ class DietProblem(IntegerProblem):
         variety_score_total = np.sum(food_counts_total > 1)
         total_variety += self.config.sigma * variety_score_total
         
-        self.all_fitness.append(total_fitness ** 0.5)
-
         solution.objectives[0] = total_fitness ** 0.5
-        solution.objectives[1] = 1/total_variety
+        solution.objectives[1] = total_variety
+        
+        self.all_fitness.append(solution.objectives[0])
+        self.all_variety.append(solution.objectives[1])
+
         #print('total_fitness: ' + str(solution.objectives[0]))
         #print('total_variety: ' + str(solution.objectives[1]))
         return solution
@@ -109,7 +112,7 @@ class DietProblem(IntegerProblem):
     def fitness_column(self, kcal: float, p: float, hc: float, g: float, pond_meal: float) -> float:
         return self.config.alpha * abs(self.config.kc - kcal) + \
                 self.config.beta * (abs(self.config.p - p) + abs(self.config.hc - hc) + abs(self.config.g - g)) + \
-                self.config.gamma * pond_meal
+                self.config.gamma * (1 - pond_meal)
 
     def pond_horario(self, c: int, h: int) -> float:
         meal = self.food_objects[c]

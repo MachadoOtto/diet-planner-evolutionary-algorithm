@@ -22,6 +22,7 @@ def print_solution(solution, problem, model_config, food_array, with_details = F
     carbs_week = 0
     fat_week = 0 
     the_solution = solution.variables
+    
     for day in range(problem.number_of_days):
         print(f"Day {day + 1}:")
         calories_day = 0
@@ -95,3 +96,32 @@ def plot_fitness(fitness):
     ax.set_title('Fitness vs Generations')
     fig.tight_layout()
     plt.show()
+
+def plot_NSGAII(algorithm, problem, timestamp):
+    # Gráfico de Fitness
+    plt.figure()
+    xs = [x for x in range(algorithm.evaluations)]
+    plt.plot(xs, problem.all_fitness, '.', label='Fitness')
+    plt.title('NSGA-II - Convergencia de Fitness')
+    plt.xlabel('Evaluations')
+    plt.ylabel('Objective Value')
+    plt.legend()
+    plt.savefig(f"output/nsgaii/fitness_{timestamp}.png")  # Guarda el gráfico en un archivo llamado 'fitness.png'
+
+    # Gráfico de Variety
+    plt.figure()
+    plt.plot(xs, problem.all_variety, '.', label='Variety')
+    plt.title('NSGA-II - Convergencia de Variety')
+    plt.xlabel('Evaluations')
+    plt.ylabel('Objective Value')
+    plt.legend()
+    plt.savefig(f"output/nsgaii/variety_{timestamp}.png")  # Guarda el gráfico en un archivo llamado 'variety.png'
+
+    # Gráfico de Pareto
+    plt.figure()
+    plt.scatter(problem.all_fitness, problem.all_variety, s=100)
+    plt.title('NSGA-II - Front de Pareto')
+    plt.xlabel('Fitness')
+    plt.ylabel('Variety')
+    plt.legend()
+    plt.savefig(f"output/nsgaii/pareto_{timestamp}.png")  # Guarda el gráfico en un archivo llamado 'pareto.png'

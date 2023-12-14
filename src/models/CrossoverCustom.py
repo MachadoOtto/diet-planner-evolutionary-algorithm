@@ -4,6 +4,38 @@ from typing import List
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import PermutationSolution
 
+class SimplePointCrossover(Crossover[PermutationSolution, PermutationSolution]):
+    def __init__(self, probability: float, probabilityColumn: float):
+        super(SimplePointCrossover, self).__init__(probability=probability)
+        self.probabilityColumn = probabilityColumn
+
+    def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
+        if len(parents) != 2:
+            raise Exception("The number of parents is not two: {}".format(len(parents)))
+
+        offspring = copy.deepcopy(parents[::-1])
+        rand = random.random()
+        
+        if rand <= self.probability:
+            for i in range (0, len(parents[0].variables)):
+                if random.random() <= self.probabilityColumn:
+                    offspring[0].variables[i] = parents[0].variables[i]
+                    offspring[1].variables[i] = parents[1].variables[i]
+                else:
+                    offspring[0].variables[i] = parents[1].variables[i]
+                    offspring[1].variables[i] = parents[0].variables[i]
+
+        return offspring
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self):
+        return "Simple point crossover"
+
 class ColumnCrossover(Crossover[PermutationSolution, PermutationSolution]):
     def __init__(self, probability: float, probabilityColumn: float, number_of_columns: int,
             number_of_rows: int, number_of_instances: int):
@@ -71,4 +103,4 @@ class RowCrossover(Crossover[PermutationSolution, PermutationSolution]):
         return 2
 
     def get_name(self):
-        return "Column crossover"
+        return "Row crossover"
