@@ -1,5 +1,12 @@
+# diet-planner-evolutionary-algorithm - Algoritmos Evolutivos - FING 2023
+# Integrantes:
+#   - Jorge Miguel Machado
+#   - Santiago Pereira
+
+# Imports
 import configparser
 
+# Config class
 class Config:
     
     def __init__(self, filename, type):
@@ -23,6 +30,7 @@ class Config:
             self.population_size = int(config['ALGORITHM']['population_size'])
             self.offspring_population_size = int(config['ALGORITHM']['offspring_population_size'])
             self.max_evaluations = int(config['ALGORITHM']['max_evaluations'])
-            self.mutation_probability = float(config['ALGORITHM']['mutation_probability'])
-            self.crossover_probability = float(config['ALGORITHM']['crossover_probability'])
+            #self.mutation_probability = float(config['ALGORITHM']['mutation_probability'])
+            #self.crossover_probability = float(config['ALGORITHM']['crossover_probability'])
             self.probability_column = float(config['ALGORITHM']['probability_column'])
+            self.executions = int(config['ALGORITHM']['executions'])

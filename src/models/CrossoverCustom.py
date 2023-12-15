@@ -1,9 +1,17 @@
+# diet-planner-evolutionary-algorithm - Algoritmos Evolutivos - FING 2023
+# Integrantes:
+#   - Jorge Miguel Machado
+#   - Santiago Pereira
+
+# Imports
 import copy
 import random
 from typing import List
+# JMetal imports
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import PermutationSolution
 
+# Crossover operators
 class SimplePointCrossover(Crossover[PermutationSolution, PermutationSolution]):
     def __init__(self, probability: float, probabilityColumn: float):
         super(SimplePointCrossover, self).__init__(probability=probability)

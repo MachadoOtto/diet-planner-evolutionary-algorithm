@@ -143,5 +143,4 @@ install_manifest.txt
 *.CMake
 *.cmake.in
 *.pc
-*.txt
 *.xml

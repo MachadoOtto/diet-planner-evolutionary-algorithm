@@ -1,9 +1,17 @@
+# diet-planner-evolutionary-algorithm - Algoritmos Evolutivos - FING 2023
+# Integrantes:
+#   - Jorge Miguel Machado
+#   - Santiago Pereira
+
+# Imports
 import numpy as np
 import re
+from src.models.Config import Config
+# JMetal imports
 from jmetal.core.problem import IntegerProblem
 from jmetal.core.solution import IntegerSolution
-from src.models.Config import Config
 
+# DietProblem class
 class DietProblem(IntegerProblem):
     def __init__(self, number_of_meals: int, number_of_days: int, max_portions:int, food_ids: int, 
             food_objects: list, config: Config):
