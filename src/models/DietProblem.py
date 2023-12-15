@@ -105,9 +105,7 @@ class DietProblem(IntegerProblem):
         
         self.all_fitness.append(solution.objectives[0])
         self.all_variety.append(solution.objectives[1])
-
-        #print('total_fitness: ' + str(solution.objectives[0]))
-        #print('total_variety: ' + str(solution.objectives[1]))
+        
         return solution
 
     def create_solution(self) -> IntegerSolution:
