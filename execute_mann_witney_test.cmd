@@ -1,0 +1,1 @@
+python3 .\src\utils\mann_witney_test.py instance_1 instance_2 18

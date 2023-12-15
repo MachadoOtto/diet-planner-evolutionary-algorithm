@@ -1,0 +1,1 @@
+python3 .\src\utils\anderson_darling_test.py instance_1 18

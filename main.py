@@ -129,7 +129,7 @@ def test_nsagii(args: Args, ae, instance, proyect_name):
     result = Result([min1, median1, max1, std_dev1], [min2, median2, max2, std_dev2], [min3, median3, max3, std_dev3])
 
     # A .txt file with the results for fitness_objective, variety_objective and execution times
-    with open(f'output/{proyect_name}/output_{crossover_name}_AE_{ae}.txt', 'w') as f:
+    with open(f'output/{proyect_name}/output_AE_{ae}.txt', 'w') as f:
             f.write(f"""NSGA-II - Instance {instance} - AE {ae} - {crossover_name}            
 Fitness objective:
     Median: {median1}
@@ -187,7 +187,7 @@ All execution times: {execution_times}""")
     plt.title(f'NSGA-II - Pareto Optimals - AE {ae} - Instance {instance} - {crossover_name}')
     plt.xlabel('Fitness')
     plt.ylabel('Variety')
-    plt.savefig(f"output/{instance}/optimals_AE{ae}.png")
+    plt.savefig(f"output/{instance}/optimals_AE_{ae}.png")
     
     return result
 
@@ -205,7 +205,7 @@ def main(instance, proyect_name):
     print(f"[INFO] Executing {len(config)} AEs of NSGA-II")
 
     # Create blank .csv file
-    with open(f'output/{proyect_name}/output_instance{instance}.csv', 'w') as f:
+    with open(f'output/{proyect_name}/output_instance_{instance}.csv', 'w') as f:
         f.write('ae,crossover_type,crossover_probability,mutation_probability,fitness_min,fitness_mean,fitness_max,fitness_sd,variety_min,variety_mean,variety_max,variety_sd,execution_time_min,execution_time_mean,execution_time_max,execution_time_sd\n')
 
 
@@ -215,7 +215,7 @@ def main(instance, proyect_name):
         result = test_nsagii(args, i + 1, instance, proyect_name)
 
         # Append the results to the .csv file
-        with open(f'output/{proyect_name}/output_instance{instance}.csv', 'a') as f:
+        with open(f'output/{proyect_name}/output_instance_{instance}.csv', 'a') as f:
            f.write(f"{i + 1},{args.crossover_type},{args.crossover_probability},{args.mutation_probability},{result.fitness_objective[0]},{result.fitness_objective[1]},{result.fitness_objective[2]},{result.fitness_objective[3]},{result.variety_objective[0]},{result.variety_objective[1]},{result.variety_objective[2]},{result.variety_objective[3]},{result.execution_times[0]},{result.execution_times[1]},{result.execution_times[2]},{result.execution_times[3]}\n")
 
     print("[INFO] All instances executed!")

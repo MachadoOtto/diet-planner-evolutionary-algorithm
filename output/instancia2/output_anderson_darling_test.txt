@@ -1,0 +1,13 @@
+Anderson-Darling Test for Fitness Objective
+Level of significance: 15.0% - Critical value: 0.574 - The data does not seem to be normal
+Level of significance: 10.0% - Critical value: 0.654 - The data does not seem to be normal
+Level of significance: 5.0% - Critical value: 0.785 - The data does not seem to be normal
+Level of significance: 2.5% - Critical value: 0.915 - The data does not seem to be normal
+Level of significance: 1.0% - Critical value: 1.089 - The data does not seem to be normal
+
+Anderson-Darling Test for Variety Objective
+Level of significance: 15.0% - Critical value: 0.574 - The data does not seem to be normal
+Level of significance: 10.0% - Critical value: 0.654 - The data does not seem to be normal
+Level of significance: 5.0% - Critical value: 0.785 - The data does not seem to be normal
+Level of significance: 2.5% - Critical value: 0.915 - The data does not seem to be normal
+Level of significance: 1.0% - Critical value: 1.089 - The data does not seem to be normal

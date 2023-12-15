@@ -1,0 +1,146 @@
+Mann-Witney Test for instancia1 and instancia2 Instances
+
+AE 1
+# Fitness
+stat=575.0, p=1.7872987279114003e-09
+Probably different distributions
+# Variety
+stat=1642.0, p=0.9632001007573827
+Probably the same distribution
+
+AE 2
+# Fitness
+stat=261.0, p=2.1522445684194054e-21
+Probably different distributions
+# Variety
+stat=2774.5, p=0.8853487498197488
+Probably the same distribution
+
+AE 3
+# Fitness
+stat=375.0, p=2.2565936604862955e-21
+Probably different distributions
+# Variety
+stat=3095.0, p=0.9518937893564688
+Probably the same distribution
+
+AE 4
+# Fitness
+stat=615.0, p=8.241975449173863e-12
+Probably different distributions
+# Variety
+stat=1670.0, p=0.04874685561259693
+Probably different distributions
+
+AE 5
+# Fitness
+stat=173.0, p=6.663766690426473e-24
+Probably different distributions
+# Variety
+stat=3187.5, p=0.39649527642942484
+Probably the same distribution
+
+AE 6
+# Fitness
+stat=372.0, p=1.2887395728243009e-22
+Probably different distributions
+# Variety
+stat=3163.0, p=0.5886315934859786
+Probably the same distribution
+
+AE 7
+# Fitness
+stat=824.0, p=1.7879621114888738e-10
+Probably different distributions
+# Variety
+stat=2188.5, p=0.6977649122022451
+Probably the same distribution
+
+AE 8
+# Fitness
+stat=182.0, p=1.2902202242765997e-21
+Probably different distributions
+# Variety
+stat=2500.0, p=0.8627972601225922
+Probably the same distribution
+
+AE 9
+# Fitness
+stat=399.0, p=7.594290132963821e-21
+Probably different distributions
+# Variety
+stat=3024.0, p=0.9499016036413905
+Probably the same distribution
+
+AE 10
+# Fitness
+stat=487.0, p=2.3982314929218924e-14
+Probably different distributions
+# Variety
+stat=2188.0, p=0.8307281122570629
+Probably the same distribution
+
+AE 11
+# Fitness
+stat=500.0, p=1.6274577599152297e-18
+Probably different distributions
+# Variety
+stat=3041.0, p=0.5361005316084567
+Probably the same distribution
+
+AE 12
+# Fitness
+stat=124.0, p=5.3699109588887395e-25
+Probably different distributions
+# Variety
+stat=2978.0, p=0.8369659847739777
+Probably the same distribution
+
+AE 13
+# Fitness
+stat=578.0, p=9.425788465057605e-10
+Probably different distributions
+# Variety
+stat=1507.5, p=0.26066064679011025
+Probably the same distribution
+
+AE 14
+# Fitness
+stat=205.0, p=1.7643882342915217e-21
+Probably different distributions
+# Variety
+stat=2357.5, p=0.34378701013785407
+Probably the same distribution
+
+AE 15
+# Fitness
+stat=429.0, p=3.3238535027625146e-20
+Probably different distributions
+# Variety
+stat=2906.5, p=0.7225965107153535
+Probably the same distribution
+
+AE 16
+# Fitness
+stat=572.0, p=1.1895961520319753e-12
+Probably different distributions
+# Variety
+stat=1669.5, p=0.03236305108063505
+Probably different distributions
+
+AE 17
+# Fitness
+stat=264.0, p=6.240509447494392e-23
+Probably different distributions
+# Variety
+stat=2768.5, p=0.2772958920780504
+Probably the same distribution
+
+AE 18
+# Fitness
+stat=148.0, p=5.079504900095095e-25
+Probably different distributions
+# Variety
+stat=3147.5, p=0.9179482301454392
+Probably the same distribution
+
