@@ -23,7 +23,8 @@ Algorithm data:
     Population size: 100
     Offspring population size: 2
     Mutation probability: 0.5
-    Crossover probability: 0.5
+    Crossover probability: 0.
+    Crossover type: Row Crossover
     Probability of parent: 0.25
     Number of evaluations: 1000
     Execution time: 6.068876028060913

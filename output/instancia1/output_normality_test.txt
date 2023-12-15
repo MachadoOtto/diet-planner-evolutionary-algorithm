@@ -1,0 +1,19 @@
+ae,crossover_type,crossover_probability,mutation_probability,fitness_anderon_darling_test,fitness_anderson_darling_sl_values,variety_anderson_darling_test,variety_anderson_darling_sl_values,fitness_shapiro_wilk_test,fitness_shapiro_wilk_p_value,variety_shapiro_wilk_test,variety_shapiro_wilk_p_value
+1,column,0.3,0.1,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.1363237500190735,False,7.589314066080988e-09
+2,column,0.3,0.3,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.3334046006202698,False,6.238580615644529e-13
+3,column,0.3,0.5,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.6773951053619385,False,5.912486483478779e-14
+4,column,0.5,0.1,True,[1.0],False,[],False,0.03783128038048744,False,1.7041805521009895e-13
+5,column,0.5,0.3,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.9767333269119263,False,9.020534970025085e-15
+6,column,0.5,0.5,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.6411485075950623,False,6.045506570394668e-14
+7,column,0.8,0.1,True,[2.5, 1.0],False,[],True,0.08415975421667099,False,1.727758019119674e-12
+8,column,0.8,0.3,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.2503415048122406,False,1.6835858878891385e-12
+9,column,0.8,0.5,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.40897470712661743,False,1.3879089697454387e-14
+10,row,0.3,0.1,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.8890960216522217,False,3.194149046821526e-13
+11,row,0.3,0.3,True,[1.0],False,[],False,0.03414199501276016,False,2.190501469448436e-13
+12,row,0.3,0.5,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.1305391639471054,False,6.677523253307074e-14
+13,row,0.5,0.1,True,[2.5, 1.0],False,[],True,0.05135047063231468,False,7.252080880260081e-13
+14,row,0.5,0.3,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.9493953585624695,False,1.3510863434984532e-12
+15,row,0.5,0.5,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.6168503761291504,False,1.453544722735886e-13
+16,row,0.8,0.1,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.4194696843624115,False,1.4497023102365975e-13
+17,row,0.8,0.3,True,[2.5, 1.0],False,[],False,0.009527351707220078,False,3.63362036856843e-13
+18,row,0.8,0.5,True,[15.0, 10.0, 5.0, 2.5, 1.0],False,[],True,0.8569539785385132,False,2.194238931177428e-12

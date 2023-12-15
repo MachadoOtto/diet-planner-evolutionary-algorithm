@@ -156,6 +156,7 @@ Algorithm data:
     Offspring population size: {algorithm_config.offspring_population_size}
     Mutation probability: {args.mutation_probability}
     Crossover probability: {args.crossover_probability}
+    Crossover type: {crossover_name}
     Probability of parent: {algorithm_config.probability_column}
     Number of evaluations: {algorithm_config.max_evaluations}
     Execution time: {exec_time}
