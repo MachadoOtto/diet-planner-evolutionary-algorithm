@@ -1,0 +1,1 @@
+python3 .\src\utils\anova_test.py instancia1 instancia2
