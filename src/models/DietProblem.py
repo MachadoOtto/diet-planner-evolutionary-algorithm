@@ -27,7 +27,7 @@ class DietProblem(IntegerProblem):
 
         # Set objectives
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['Fitness', 'Variety']
+        self.obj_labels = ['f1', 'f2']
 
         # Set bounds for variables
         self.lower_bound = [0 for _ in range(number_of_meals * number_of_days*max_portions)]
@@ -36,14 +36,14 @@ class DietProblem(IntegerProblem):
         # Load configuration
         self.config = config
 
-        self.all_fitness = []
-        self.all_variety = []
+        self.all_f1 = []
+        self.all_f2 = []
         
     def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
-        total_fitness = 0
-        total_variety = 0
+        total_f1 = 0
+        total_f2 = 0
         
-        fitness_penalty_no_portions = 1000
+        f1_penalty_no_portions = 1000
         # Array to count the number of times each food appears in the entire solution
         food_counts_total = np.zeros(self.max_food, dtype=int)
         
@@ -51,7 +51,7 @@ class DietProblem(IntegerProblem):
             # Array to count the number of times each food appears in the day
             food_counts_day = np.zeros(self.max_food, dtype=int)
            
-            fitness_day = 0
+            f1_day = 0
             kcal_acc = 0
             p_acc = 0
             hc_acc = 0
@@ -65,7 +65,7 @@ class DietProblem(IntegerProblem):
                     if (c == self.max_food):
                         null_portions += 1
                         if (null_portions == self.max_portions):
-                            fitness_day += fitness_penalty_no_portions
+                            f1_day += f1_penalty_no_portions
 
                     else:
                         # Add one to the each food counter 
@@ -88,23 +88,23 @@ class DietProblem(IntegerProblem):
                     if (portion == self.max_portions - 1):
                         null_portions = 0   
                         
-            # Calculate fitness_day and update total_fitness
-            fitness_day = self.fitness_column(kcal_acc, p_acc, hc_acc, g_acc, pond_meal**0.5)
-            total_fitness += fitness_day ** 2
+            # Calculate f1_day and update total_f1
+            f1_day = self.f1_column(kcal_acc, p_acc, hc_acc, g_acc, pond_meal**0.5)
+            total_f1 += f1_day ** 2
 
-            # Calculate variety_score_day and update total_variety
-            variety_score_day = np.sum(food_counts_day > 1)
-            total_variety += self.config.delta * variety_score_day
+            # Calculate f2_score_day and update total_f2
+            f2_score_day = np.sum(food_counts_day > 1)
+            total_f2 += self.config.delta * f2_score_day
 
-        # Calculates the variety score for the whole solution
-        variety_score_total = np.sum(food_counts_total > 1)
-        total_variety += self.config.sigma * variety_score_total
+        # Calculates the f2 score for the whole solution
+        f2_score_total = np.sum(food_counts_total > 1)
+        total_f2 += self.config.sigma * f2_score_total
         
-        solution.objectives[0] = total_fitness ** 0.5
-        solution.objectives[1] = total_variety
+        solution.objectives[0] = total_f1 ** 0.5
+        solution.objectives[1] = total_f2
         
-        self.all_fitness.append(solution.objectives[0])
-        self.all_variety.append(solution.objectives[1])
+        self.all_f1.append(solution.objectives[0])
+        self.all_f2.append(solution.objectives[1])
         
         return solution
 
@@ -115,7 +115,7 @@ class DietProblem(IntegerProblem):
             new_solution.variables[i] = np.random.choice(self.food_ids + [self.max_food])
         return new_solution
     
-    def fitness_column(self, kcal: float, p: float, hc: float, g: float, pond_meal: float) -> float:
+    def f1_column(self, kcal: float, p: float, hc: float, g: float, pond_meal: float) -> float:
         return self.config.alpha * abs(self.config.kc - kcal) + \
                 self.config.beta * (abs(self.config.p - p) + abs(self.config.hc - hc) + abs(self.config.g - g)) + \
                 self.config.gamma * (1 - pond_meal)

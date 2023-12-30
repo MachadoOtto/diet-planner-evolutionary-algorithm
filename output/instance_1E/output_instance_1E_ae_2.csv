@@ -1,0 +1,2 @@
+ae,crossover_type,crossover_probability,mutation_probability,f1_min,f1_mean,f1_max,f1_sd,f2_min,f2_mean,f2_max,f2_sd,execution_time_min,execution_time_mean,execution_time_max,execution_time_sd
+2,column,0.3,0.01,248.91323956617768,357.6619398451522,465.97051709640846,57.56309687992753,0.0,0.0,120.0,24.420726485634447,5.911841154098511,6.208160400390625,6.537720203399658,0.16734091838348533

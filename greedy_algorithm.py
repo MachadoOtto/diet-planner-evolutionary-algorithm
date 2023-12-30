@@ -13,19 +13,19 @@ import argparse
 
 # Greedy algorithm
 def greedy_diet(foods, config, meals_per_day=4, days=7, foods_per_meal=4):
-    # Order the foods by fitness
-    foods.sort(key=lambda x: fitness(x, config))
+    # Order the foods by f1
+    foods.sort(key=lambda x: f1(x, config))
 
     # Initialize the diet
     diet = np.empty((days*meals_per_day*foods_per_meal), dtype=object)
     daily_nutrition_limits = {'Calories': config.kc, 'Protein': config.p, 'Carbs': config.hc, 'Fat': config.g}
     food_counts_total = np.zeros(len(foods), dtype=int)
-    total_fitness = 0
-    total_variety = 0
+    total_f1 = 0
+    total_f2 = 0
 
     for day in range(days):
         food_counts_day = np.zeros(len(foods), dtype=int)
-        fitness_day = 0
+        f1_day = 0
         kcal_acc = 0
         p_acc = 0
         hc_acc = 0
@@ -59,25 +59,25 @@ def greedy_diet(foods, config, meals_per_day=4, days=7, foods_per_meal=4):
 
                         break
         
-        # Calculate fitness_day and update total_fitness
+        # Calculate f1_day and update total_f1
         print(f"Day: {day}, Calories: {kcal_acc}, Protein: {p_acc}, Carbs: {hc_acc}, Fat: {g_acc}, Pond: {pond_meal**0.5}\n")
-        fitness_day = fitness_column(config, kcal_acc, p_acc, hc_acc, g_acc, pond_meal**0.5)
-        total_fitness += fitness_day ** 2
+        f1_day = f1_column(config, kcal_acc, p_acc, hc_acc, g_acc, pond_meal**0.5)
+        total_f1 += f1_day ** 2
 
-        # Calculate variety_score_day and update total_variety
-        variety_score_day = np.sum(food_counts_day > 1)
-        total_variety += config.delta * variety_score_day
+        # Calculate f2_score_day and update total_f2
+        f2_score_day = np.sum(food_counts_day > 1)
+        total_f2 += config.delta * f2_score_day
 
-    # Calculates the variety score for the whole solution
-    variety_score_total = np.sum(food_counts_total > 1)
-    total_variety += config.sigma * variety_score_total
+    # Calculates the f2 score for the whole solution
+    f2_score_total = np.sum(food_counts_total > 1)
+    total_f2 += config.sigma * f2_score_total
 
-    total_fitness = total_fitness ** 0.5
+    total_f1 = total_f1 ** 0.5
 
-    return diet, total_fitness, total_variety
+    return diet, total_f1, total_f2
 
-# Fitness function
-def fitness(food, config):
+# f1 function
+def f1(food, config):
     kcal = food['Calories']
     p = food['Protein']
     hc = food['Carbs']
@@ -85,8 +85,8 @@ def fitness(food, config):
     return config.alpha * abs(config.kc - kcal) + \
            config.beta * (abs(config.p - p) + abs(config.hc - hc) + abs(config.g - g))
 
-# Fitness function
-def fitness_column(config, kcal: float, p: float, hc: float, g: float, pond_meal: float) -> float:
+# f1 function
+def f1_column(config, kcal: float, p: float, hc: float, g: float, pond_meal: float) -> float:
         return config.alpha * abs(config.kc - kcal) + \
                 config.beta * (abs(config.p - p) + abs(config.hc - hc) + abs(config.g - g)) + \
                 config.gamma * (1 - pond_meal)
@@ -114,12 +114,12 @@ def main(instance):
     start = time.time() 
 
     # Run the greedy algorithm
-    diet, fitness, variety = greedy_diet(food_array, model_config, meals_per_day=4, days=7, foods_per_meal=4)
+    diet, f1, f2 = greedy_diet(food_array, model_config, meals_per_day=4, days=7, foods_per_meal=4)
 
     end = time.time()
 
-    print(f"Fitness: {fitness}")
-    print(f"Variety: {variety}")
+    print(f"f1: {f1}")
+    print(f"f2: {f2}")
     print(f"Execution Time: {end - start}")
     print(f"Solution: {diet}")
 

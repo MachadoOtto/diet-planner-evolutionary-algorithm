@@ -1,0 +1,1 @@
+python3 ./main.py 1E instance_1E --ae 2

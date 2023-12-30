@@ -24,6 +24,7 @@ from jmetal.operator import BestSolutionSelection
 from jmetal.operator import IntegerPolynomialMutation
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.solution import get_non_dominated_solutions
+from pymoo.indicators.hv import HV
 
 # Select the crossover operator
 def select_crossover(params, algorithm_config, problem):
@@ -97,28 +98,35 @@ def test_nsagii(args: Args, ae, instance, proyect_name):
     food_ids = [food['id'] for food in food_array]
 
     # Initialize the variables
-    fitness_objective = []
-    variety_objective = []
+    f1_objective = []
+    f2_objective = []
     execution_times = []
+    fronts = []
+    first_solution = []
 
     # Execute the algorithm
     for i in range(algorithm_config.executions):
         front, exec_time = execute_algorithm(args, food_array, food_ids, model_config, algorithm_config)
-        fitness_objective.extend([s.objectives[0] for s in front])
-        variety_objective.extend([s.objectives[1] for s in front])
+        f1_objective.extend([s.objectives[0] for s in front])
+        f2_objective.extend([s.objectives[1] for s in front])
         execution_times.append(exec_time)
-    
-    # Calculating the statistics for the fitness_objective
-    median1 = np.median(fitness_objective)
-    max1 = np.max(fitness_objective)
-    min1 = np.min(fitness_objective)
-    std_dev1 = np.std(fitness_objective)
+        if i == 0:
+            first_solution = front[0].variables
 
-    # Calculating the statistics for the variety_objective
-    median2 = np.median(variety_objective)
-    max2 = np.max(variety_objective)
-    min2 = np.min(variety_objective)
-    std_dev2 = np.std(variety_objective)
+        pareto_front = np.array([[s.objectives[0], s.objectives[1]] for s in front])
+        fronts.append(pareto_front)
+
+    # Calculating the statistics for the f1_objective
+    median1 = np.median(f1_objective)
+    max1 = np.max(f1_objective)
+    min1 = np.min(f1_objective)
+    std_dev1 = np.std(f1_objective)
+
+    # Calculating the statistics for the f2_objective
+    median2 = np.median(f2_objective)
+    max2 = np.max(f2_objective)
+    min2 = np.min(f2_objective)
+    std_dev2 = np.std(f2_objective)
 
     # Calculating the statistics for the execution times
     median3 = np.median(execution_times)
@@ -128,16 +136,16 @@ def test_nsagii(args: Args, ae, instance, proyect_name):
 
     result = Result([min1, median1, max1, std_dev1], [min2, median2, max2, std_dev2], [min3, median3, max3, std_dev3])
 
-    # A .txt file with the results for fitness_objective, variety_objective and execution times
+    # A .txt file with the results for f1_objective, f2_objective and execution times
     with open(f'output/{proyect_name}/output_AE_{ae}.txt', 'w') as f:
             f.write(f"""NSGA-II - Instance {instance} - AE {ae} - {crossover_name}            
-Fitness objective:
+f1 objective:
     Median: {median1}
     Max: {max1}
     Min: {min1}
     Std. Dev.: {std_dev1}
                     
-Variety objective:
+f2 objective:
     Median: {median2}
     Max: {max2}
     Min: {min2}
@@ -147,8 +155,8 @@ Execution times:
     Median: {median3}
     Max: {max3}
     Min: {min3}
-    Std. Dev.: {std_dev3}
-                    
+    Std. Dev.: {std_dev3}            
+    
 Algorithm data:
     Algorithm: NSGA-II
     Executions: {algorithm_config.executions}
@@ -179,20 +187,23 @@ Model Hiperparameters:
     Delta: {model_config.delta}
     Sigma: {model_config.sigma}
                     
-All fitness: {fitness_objective}
-All variety: {variety_objective}
-All execution times: {execution_times}""")
+All f1: {f1_objective}
+All f2: {f2_objective}
+All execution times: {execution_times}
+All pareto fronts: {fronts}
+
+First front solutions: {first_solution}""")
 
     plt.figure()
-    plt.scatter(fitness_objective, variety_objective, s=1)
+    plt.scatter(f1_objective, f2_objective, s=1)
     plt.title(f'NSGA-II - Pareto Optimals - AE {ae} - Instance {instance} - {crossover_name}')
-    plt.xlabel('Fitness')
-    plt.ylabel('Variety')
-    plt.savefig(f"output/{instance}/optimals_AE_{ae}.png")
+    plt.xlabel('f1')
+    plt.ylabel('f2')
+    plt.savefig(f"output/{proyect_name}/optimals_AE_{ae}.png")
     
-    return result
+    return result, max1, max2, fronts
 
-def main(instance, proyect_name):
+def main_all(instance, proyect_name):
     print_title()
     print(f"[INFO] Instance selected: {instance}")
     print(f"[INFO] Output folder: ./output/{proyect_name}")
@@ -207,24 +218,136 @@ def main(instance, proyect_name):
 
     # Create blank .csv file
     with open(f'output/{proyect_name}/output_instance_{instance}.csv', 'w') as f:
-        f.write('ae,crossover_type,crossover_probability,mutation_probability,fitness_min,fitness_mean,fitness_max,fitness_sd,variety_min,variety_mean,variety_max,variety_sd,execution_time_min,execution_time_mean,execution_time_max,execution_time_sd\n')
+        f.write('ae,crossover_type,crossover_probability,mutation_probability,f1_min,f1_mean,f1_max,f1_sd,f2_min,f2_mean,f2_max,f2_sd,execution_time_min,execution_time_mean,execution_time_max,execution_time_sd\n')
 
+    with open(f'output/{proyect_name}/output_hypervolume_instance_{instance}.csv', 'w') as f:
+        f.write('ae,crossover_type,crossover_probability,mutation_probability,hv_min,hv_mean,hv_max,hv_sd\n')
+
+    box_hypervolumes = []
+    f1_max = 0
+    f2_max = 0
+    exec_fronts = []
 
     for i in range(len(config)):
         args = Args(config[i].get('crossover_type'), config[i].get('crossover_probability'), config[i].get('mutation_probability'))
         
-        result = test_nsagii(args, i + 1, instance, proyect_name)
+        result, max1, max2, fronts = test_nsagii(args, i + 1, instance, proyect_name)
 
         # Append the results to the .csv file
         with open(f'output/{proyect_name}/output_instance_{instance}.csv', 'a') as f:
-           f.write(f"{i + 1},{args.crossover_type},{args.crossover_probability},{args.mutation_probability},{result.fitness_objective[0]},{result.fitness_objective[1]},{result.fitness_objective[2]},{result.fitness_objective[3]},{result.variety_objective[0]},{result.variety_objective[1]},{result.variety_objective[2]},{result.variety_objective[3]},{result.execution_times[0]},{result.execution_times[1]},{result.execution_times[2]},{result.execution_times[3]}\n")
+           f.write(f"{i + 1},{args.crossover_type},{args.crossover_probability},{args.mutation_probability},{result.f1_objective[0]},{result.f1_objective[1]},{result.f1_objective[2]},{result.f1_objective[3]},{result.f2_objective[0]},{result.f2_objective[1]},{result.f2_objective[2]},{result.f2_objective[3]},{result.execution_times[0]},{result.execution_times[1]},{result.execution_times[2]},{result.execution_times[3]}\n")
+
+        f1_max = max1 if max1 > f1_max else f1_max
+        f2_max = max2 if max2 > f2_max else f2_max
+        exec_fronts.append(fronts)
+
+    # Calculate the hypervolumes
+    ref_point = np.array([f1_max * 1.1, f2_max * 1.1])
+
+    for i in range(len(config)):
+        hypervolumes = []
+
+        for j in range(len(exec_fronts[i])):
+            # Calculate the hypervolume of the pareto front
+            hypervolume = HV(ref_point=ref_point)
+            hv_value = hypervolume(exec_fronts[i][j])
+            hypervolumes.append(hv_value)
+
+        # Calculate the statistics for the hypervolumes
+        median_hv = np.median(hypervolumes)
+        max_hv = np.max(hypervolumes)
+        min_hv = np.min(hypervolumes)
+        std_dev_hv = np.std(hypervolumes)
+
+        # Append the results to the .csv file
+        with open(f'output/{proyect_name}/output_hypervolume_instance_{instance}.csv', 'a') as f:
+            f.write(f"{i + 1},{config[i].get('crossover_type')},{config[i].get('crossover_probability')},{config[i].get('mutation_probability')},{min_hv},{median_hv},{max_hv},{std_dev_hv}\n")
+        
+        box_hypervolumes.append(hypervolumes)
+
+    # Plot the boxplot of the hypervolumes
+    plt.boxplot(box_hypervolumes)
+    plt.title(f'Hypervolumes - NSGA-II - Instance {instance}')
+    plt.ylabel('Hypervolume')
+    plt.xlabel('AE')
+    plt.show()
+
+    print("[INFO] All instances executed!")
+
+# Execute the algorithm for a single AE
+def main_ae(instance, proyect_name, ae):
+    print_title()
+    print(f"[INFO] Instance selected: {instance}")
+    print(f"[INFO] AE selected: {ae}")
+    print(f"[INFO] Output folder: ./output/{proyect_name}")
+
+    # Disable the warnings of JMetal
+    logging.getLogger('jmetal').setLevel(logging.WARNING)
+    warnings.filterwarnings("ignore")
+
+    # Parse the arguments
+    config = read_algorithm_config()
+    print(f"[INFO] Executing AE-{ae} of NSGA-II")
+
+    # Create blank .csv file
+    with open(f'output/{proyect_name}/output_instance_{instance}_ae_{ae}.csv', 'w') as f:
+        f.write('ae,crossover_type,crossover_probability,mutation_probability,f1_min,f1_mean,f1_max,f1_sd,f2_min,f2_mean,f2_max,f2_sd,execution_time_min,execution_time_mean,execution_time_max,execution_time_sd\n')
+
+    with open(f'output/{proyect_name}/output_hypervolume_instance_{instance}_ae_{ae}.csv', 'w') as f:
+        f.write('ae,crossover_type,crossover_probability,mutation_probability,hv_min,hv_mean,hv_max,hv_sd\n')
+
+    box_hypervolumes = []
+    f1_max = 0
+    f2_max = 0
+    
+    args = Args(config[ae - 1].get('crossover_type'), config[ae - 1].get('crossover_probability'), config[ae - 1].get('mutation_probability'))
+        
+    result, max1, max2, fronts = test_nsagii(args, ae, instance, proyect_name)
+
+    # Append the results to the .csv file
+    with open(f'output/{proyect_name}/output_instance_{instance}_ae_{ae}.csv', 'a') as f:
+        f.write(f"{ae},{args.crossover_type},{args.crossover_probability},{args.mutation_probability},{result.f1_objective[0]},{result.f1_objective[1]},{result.f1_objective[2]},{result.f1_objective[3]},{result.f2_objective[0]},{result.f2_objective[1]},{result.f2_objective[2]},{result.f2_objective[3]},{result.execution_times[0]},{result.execution_times[1]},{result.execution_times[2]},{result.execution_times[3]}\n")
+
+    f1_max = max1 if max1 > f1_max else f1_max
+    f2_max = max2 if max2 > f2_max else f2_max
+    
+    # Calculate the hypervolumes
+    ref_point = np.array([1184 * 1.1, 230 * 1.1])
+
+    hypervolumes = []
+
+    for j in range(len(fronts)):
+        # Calculate the hypervolume of the pareto front
+        hypervolume = HV(ref_point=ref_point)
+        hv_value = hypervolume(fronts[j])
+        hypervolumes.append(hv_value)
+
+    # Calculate the statistics for the hypervolumes
+    median_hv = np.median(hypervolumes)
+    max_hv = np.max(hypervolumes)
+    min_hv = np.min(hypervolumes)
+    std_dev_hv = np.std(hypervolumes)
+
+    # Append the results to the .csv file
+    with open(f'output/{proyect_name}/output_hypervolume_instance_{instance}_ae_{ae}.csv', 'a') as f:
+        f.write(f"{ae},{config[ae - 1].get('crossover_type')},{config[ae - 1].get('crossover_probability')},{config[ae - 1].get('mutation_probability')},{min_hv},{median_hv},{max_hv},{std_dev_hv}\n")
+        
+    box_hypervolumes.append(hypervolumes)
+
+    # Plot the boxplot of the hypervolumes
+    plt.boxplot(box_hypervolumes)
+    plt.title(f'Hypervolumes - NSGA-II - Instance {instance}')
+    plt.ylabel('Hypervolume')
+    plt.xlabel('AE')
+    plt.show()
 
     print("[INFO] All instances executed!")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Diet Problem - NSGA-II')
-    parser.add_argument('instance', type=int, choices=[1, 2], help='Instance to execute')
+    parser.add_argument('instance', type=str, choices=['1', '2', '1E', '2E'], help='Instance to execute')
     parser.add_argument('proyect_name', type=str, help='Name of the proyect')
+    parser.add_argument('--ae', type=int, default=0, help='Number of the AE to execute, 0 for all')
     args = parser.parse_args()
 
     # Create proyect folder inside 'output' folder, if an error occurs, exit 
@@ -234,4 +357,7 @@ if __name__ == '__main__':
         print(f"[ERROR] An error ocurred while creating the proyect folder")
         exit()
 
-    main(args.instance, args.proyect_name)
+    if args.ae == 0:
+        main_all(args.instance, args.proyect_name)
+    else:
+        main_ae(args.instance, args.proyect_name, args.ae)

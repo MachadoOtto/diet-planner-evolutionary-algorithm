@@ -1,0 +1,4 @@
+Friedman Test and Ranking for instance_1
+Friedman Statistic: 450.70175438596516
+p-value: 4.41814352130536e-85
+Ranks: [17.  2.  9. 18.  1. 12. 13.  6. 11. 15.  4.  8. 14.  7.  5. 16.  3. 10.]

@@ -5,7 +5,7 @@
 
 # Result class
 class Result:
-    def __init__(self, fitness_objective, variety_objective, execution_times):
-        self.fitness_objective = fitness_objective
-        self.variety_objective = variety_objective
+    def __init__(self, f1_objective, f2_objective, execution_times):
+        self.f1_objective = f1_objective
+        self.f2_objective = f2_objective
         self.execution_times = execution_times

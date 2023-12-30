@@ -1,1 +1,1 @@
-pip install numpy matplotlib jmetalpy
+pip install numpy matplotlib jmetalpy pymoo scipy
